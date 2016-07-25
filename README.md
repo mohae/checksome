@@ -1,6 +1,6 @@
 # checksome
 
-[![GoDoc](https://godoc.org/github.com/mohae/checksome?status.svg)](https://godoc.org/github.com/mohae/checksome)[![Build Status](https://travis-ci.org/mohae/checksome.png)](https://travis-ci.org/mohae/checksome)
+[![Build Status](https://travis-ci.org/mohae/checksome.png)](https://travis-ci.org/mohae/checksome)
 
 Calculates checksums.
 
@@ -19,6 +19,6 @@ Calculates checksums.
 `checksome -h`
 
 ## License  
-Copyright (c) 2016 Joel Scoble under The MIT Lixense (MIT)
+Copyright (c) 2016 Joel Scoble under The MIT License (MIT)
 
 See the LICENSE file for the specific language governing permissions and limitations under the License.
