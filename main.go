@@ -70,7 +70,9 @@ func realMain() int {
 		}
 		defer out.Close()
 	}
-
+	if verbose {
+		out.WriteString(fmt.Sprintf("%s:\t", typ.String()))
+	}
 	n, err = calcSum(typ, chunkSize, in, out)
 	if err != nil {
 		log.Printf("error calculating %s: %s", typ, err)
@@ -78,7 +80,7 @@ func realMain() int {
 	}
 	out.WriteString("\n")
 	if verbose {
-		fmt.Printf("%s of %s: %d bytes read\n", typ, input, n)
+		fmt.Printf("%s (%s): %d bytes read\n", input, typ, n)
 	}
 	return 0
 }
