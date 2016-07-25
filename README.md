@@ -12,3 +12,13 @@ Calculates checksums.
 * SHA512_224  
 * SHA512_256  
 
+## Usage
+
+`go install github.com/mohae/checksome`
+
+`checksome -h`
+
+## License  
+Copyright (c) 2016 Joel Scoble under The MIT Lixense (MIT)
+
+See the LICENSE file for the specific language governing permissions and limitations under the License.
