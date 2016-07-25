@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/mohae/checksome.png)](https://travis-ci.org/mohae/checksome)
 
-Calculates checksums.
+Cross-platform tool to calculate checksums.
 
 ## Supported Checksum algorithms  
 * SHA1  
