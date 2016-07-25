@@ -11,29 +11,10 @@ var (
 	input     string
 	output    string
 	uri       string
+	checksum  string
 	chunkSize int
-	checksums stringArray
+	verbose   bool
 )
-
-type stringArray []string
-
-func (f *stringArray) String() string {
-	var s string
-	for i, v := range *f {
-		if i == 0 {
-			s = v
-			continue
-		}
-		s += ", " + v
-
-	}
-	return s
-}
-
-func (f *stringArray) Set(v string) error {
-	*f = append(*f, v)
-	return nil
-}
 
 func init() {
 	flag.StringVar(&input, "input", "stdin", "input source")
@@ -44,8 +25,10 @@ func init() {
 	flag.StringVar(&uri, "u", "", "url of the input, takes precedence over -input (short)")
 	flag.IntVar(&chunkSize, "chunksize", 8192, "size, in bytes, of each read from the input")
 	flag.IntVar(&chunkSize, "s", 8192, "size, in bytes, of each read from the input (short)")
-	flag.Var(&checksums, "checksum", "checksum algorithm to use: default is sha256")
-	flag.Var(&checksums, "c", "checksum algorithm to use: default is sha256 (short)")
+	flag.BoolVar(&verbose, "verbose", false, "verbose output")
+	flag.BoolVar(&verbose, "v", false, "verbose output (short)")
+	flag.StringVar(&checksum, "checksum", "sha256", "checksum algorithm")
+	flag.StringVar(&checksum, "c", "sha256", "checksum algorithm (short)")
 
 }
 
@@ -55,10 +38,7 @@ func main() {
 
 func realMain() int {
 	flag.Parse()
-	if len(checksums) == 0 {
-		checksums = append(checksums, "sha256")
-	}
-	typs, err := processChecksumTypes(checksums)
+	typ, err := checksumFromString(checksum)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -91,14 +71,14 @@ func realMain() int {
 		defer out.Close()
 	}
 
-	// initially, only support calculation of 1 hash at a time.
-	// mutli-hash support probably involves multi-writer
-	n, err = calcSum(typs[0], chunkSize, in, out)
+	n, err = calcSum(typ, chunkSize, in, out)
 	if err != nil {
-		log.Printf("error calculating %s: %s", typs[0], err)
+		log.Printf("error calculating %s: %s", typ, err)
 		return 1
 	}
 	out.WriteString("\n")
-	log.Printf("%s of %s calculated: %d bytes read", typs[0], input, n)
+	if verbose {
+		fmt.Printf("%s of %s: %d bytes read\n", typ, input, n)
+	}
 	return 0
 }

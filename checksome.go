@@ -26,31 +26,26 @@ const (
 	SHA512_256
 )
 
-// processChecksumTypes matches strings to their Checksum types; if a string
-// value doesn't match a supported type, an error is returned.
-func processChecksumTypes(vals []string) ([]Checksum, error) {
-	var typs []Checksum
-	for _, v := range vals {
-		switch strings.ToLower(v) {
-		case "sha1":
-			typs = append(typs, SHA1)
-		case "sha224":
-			typs = append(typs, SHA224)
-		case "sha256":
-			typs = append(typs, SHA256)
-		case "sha384":
-			typs = append(typs, SHA384)
-		case "sha512":
-			typs = append(typs, SHA512)
-		case "sha512_224":
-			typs = append(typs, SHA512_224)
-		case "sha512_256":
-			typs = append(typs, SHA512_256)
-		default:
-			return nil, fmt.Errorf("unknown checksum type: %s", v)
-		}
+// checksumFromString returns the Checksum from the provided string.
+func checksumFromString(v string) (Checksum, error) {
+	switch strings.ToLower(v) {
+	case "sha1":
+		return SHA1, nil
+	case "sha224":
+		return SHA224, nil
+	case "sha256":
+		return SHA256, nil
+	case "sha384":
+		return SHA384, nil
+	case "sha512":
+		return SHA512, nil
+	case "sha512_224":
+		return SHA512_224, nil
+	case "sha512_256":
+		return SHA512_256, nil
+	default:
+		return Unknown, fmt.Errorf("unknown checksum type: %s", v)
 	}
-	return typs, nil
 }
 
 func getHasher(typ Checksum) hash.Hash {

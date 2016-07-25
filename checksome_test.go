@@ -2,36 +2,33 @@ package main
 
 import (
 	"bytes"
-	"reflect"
 	"testing"
 )
 
-func TestProcessChecksumTypes(t *testing.T) {
+func TestChecksumFromString(t *testing.T) {
 	tests := []struct {
-		vals     []string
-		expected []Checksum
+		val      string
+		expected Checksum
 		err      string
 	}{
-		{[]string{"SHA1"}, []Checksum{SHA1}, ""},
-		{
-			[]string{"SHA1", "SHA224", "SHA256", "SHA384", "SHA512", "SHA512_224", "SHA512_256"},
-			[]Checksum{SHA1, SHA224, SHA256, SHA384, SHA512, SHA512_224, SHA512_256},
-			"",
-		},
-		{
-			[]string{"SHA1", "SHA224", "SHA256", "SHA384", "SHA512", "SHA512_224", "SHA512_256"},
-			[]Checksum{SHA1, SHA224, SHA256, SHA384, SHA512, SHA512_224, SHA512_256},
-			"",
-		},
-		{
-			[]string{"SHA1", "SHA224", "SHA256", "SHA384", "SHA512", "SHA512_224", "SHA512_256"},
-			[]Checksum{SHA1, SHA224, SHA256, SHA384, SHA512, SHA512_224, SHA512_256},
-			"",
-		},
-		{[]string{"wut"}, []Checksum{}, "unknown checksum type: wut"},
+		{"sha1", SHA1, ""},
+		{"sha224", SHA224, ""},
+		{"sha256", SHA256, ""},
+		{"sha384", SHA384, ""},
+		{"sha512", SHA512, ""},
+		{"sha512_224", SHA512_224, ""},
+		{"sha512_256", SHA512_256, ""},
+		{"SHA1", SHA1, ""},
+		{"SHA224", SHA224, ""},
+		{"SHA256", SHA256, ""},
+		{"SHA384", SHA384, ""},
+		{"SHA512", SHA512, ""},
+		{"SHA512_224", SHA512_224, ""},
+		{"SHA512_256", SHA512_256, ""},
+		{"wut", Unknown, "unknown checksum type: wut"},
 	}
 	for i, test := range tests {
-		res, err := processChecksumTypes(test.vals)
+		c, err := checksumFromString(test.val)
 		if err != nil {
 			if err.Error() != test.err {
 				t.Errorf("%d: got %q want %q", i, err, test.err)
@@ -42,8 +39,8 @@ func TestProcessChecksumTypes(t *testing.T) {
 			t.Errorf("%d: got no error, expected %q", i, test.err)
 			continue
 		}
-		if !reflect.DeepEqual(res, test.expected) {
-			t.Errorf("%d: got %v want %v", i, res, test.expected)
+		if c != test.expected {
+			t.Errorf("%d: got %v want %v", i, c, test.expected)
 		}
 	}
 }
