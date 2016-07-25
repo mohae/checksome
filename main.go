@@ -10,9 +10,9 @@ import (
 var (
 	input     string
 	output    string
-	uri       string
 	checksum  string
 	chunkSize int
+	upper     bool
 	verbose   bool
 )
 
@@ -21,12 +21,12 @@ func init() {
 	flag.StringVar(&input, "i", "stdin", "input source (short)")
 	flag.StringVar(&output, "output", "stdout", "output destination")
 	flag.StringVar(&output, "o", "stdout", "output destination (short)")
-	flag.StringVar(&uri, "url", "", "url of the input, takes precedence over -input")
-	flag.StringVar(&uri, "u", "", "url of the input, takes precedence over -input (short)")
 	flag.IntVar(&chunkSize, "chunksize", 8192, "size, in bytes, of each read from the input")
 	flag.IntVar(&chunkSize, "s", 8192, "size, in bytes, of each read from the input (short)")
 	flag.BoolVar(&verbose, "verbose", false, "verbose output")
 	flag.BoolVar(&verbose, "v", false, "verbose output (short)")
+	flag.BoolVar(&upper, "upper", false, "uppercase the output")
+	flag.BoolVar(&upper, "u", false, "uppercase the output (short)")
 	flag.StringVar(&checksum, "checksum", "sha256", "checksum algorithm")
 	flag.StringVar(&checksum, "c", "sha256", "checksum algorithm (short)")
 

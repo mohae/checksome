@@ -97,8 +97,11 @@ func calcSum(c Checksum, chunk int, r io.Reader, w io.Writer) (n int64, err erro
 		}
 	}
 	bs := h.Sum(nil)
-	fmt.Fprintf(w, "%x", bs)
-	//w.Write(bs)
+	if upper {
+		fmt.Fprintf(w, "%X", bs)
+	} else {
+		fmt.Fprintf(w, "%x", bs)
+	}
 	return n, nil
 }
 
