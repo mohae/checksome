@@ -12,6 +12,7 @@ var (
 	output    string
 	checksum  string
 	chunkSize int
+	help      bool
 	upper     bool
 	verbose   bool
 )
@@ -21,15 +22,16 @@ func init() {
 	flag.StringVar(&input, "i", "stdin", "input source (short)")
 	flag.StringVar(&output, "output", "stdout", "output destination")
 	flag.StringVar(&output, "o", "stdout", "output destination (short)")
-	flag.IntVar(&chunkSize, "chunksize", 8192, "size, in bytes, of each read from the input")
-	flag.IntVar(&chunkSize, "s", 8192, "size, in bytes, of each read from the input (short)")
+	flag.IntVar(&chunkSize, "readchunk", 8192, "size, in bytes, of each read from the input")
+	flag.IntVar(&chunkSize, "r", 8192, "size, in bytes, of each read from the input (short)")
+	flag.BoolVar(&help, "help", false, "help")
+	flag.BoolVar(&help, "h", false, "help (short)")
 	flag.BoolVar(&verbose, "verbose", false, "verbose output")
 	flag.BoolVar(&verbose, "v", false, "verbose output (short)")
 	flag.BoolVar(&upper, "upper", false, "uppercase the output")
 	flag.BoolVar(&upper, "u", false, "uppercase the output (short)")
 	flag.StringVar(&checksum, "checksum", "sha256", "checksum algorithm")
 	flag.StringVar(&checksum, "c", "sha256", "checksum algorithm (short)")
-
 }
 
 func main() {
@@ -37,7 +39,21 @@ func main() {
 }
 
 func realMain() int {
+	flag.Usage = Usage
 	flag.Parse()
+	args := flag.Args()
+	// the only arg we care about is help.  This is in case the user uses
+	// just help instead of -help or -h
+	for _, arg := range args {
+		if arg == "help" {
+			help = true
+			break
+		}
+	}
+	if help {
+		Usage()
+		return 1
+	}
 	typ, err := checksumFromString(checksum)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -83,4 +99,9 @@ func realMain() int {
 		fmt.Printf("%s (%s): %d bytes read\n", input, typ, n)
 	}
 	return 0
+}
+
+func Usage() {
+	fmt.Fprintf(os.Stderr, "Usage of %s:\n\n", os.Args[0])
+	flag.PrintDefaults()
 }
