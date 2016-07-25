@@ -11,6 +11,7 @@ var (
 	input     string
 	output    string
 	uri       string
+	chunkSize int
 	checksums stringArray
 )
 
@@ -41,6 +42,8 @@ func init() {
 	flag.StringVar(&output, "o", "stdout", "output destination (short)")
 	flag.StringVar(&uri, "url", "", "url of the input, takes precedence over -input")
 	flag.StringVar(&uri, "u", "", "url of the input, takes precedence over -input (short)")
+	flag.IntVar(&chunkSize, "chunksize", 8192, "size, in bytes, of each read from the input")
+	flag.IntVar(&chunkSize, "s", 8192, "size, in bytes, of each read from the input (short)")
 	flag.Var(&checksums, "checksum", "checksum algorithm to use: default is sha256")
 	flag.Var(&checksums, "c", "checksum algorithm to use: default is sha256 (short)")
 
@@ -90,7 +93,7 @@ func realMain() int {
 
 	// initially, only support calculation of 1 hash at a time.
 	// mutli-hash support probably involves multi-writer
-	n, err = calcSum(typs[0], 8192, in, out)
+	n, err = calcSum(typs[0], chunkSize, in, out)
 	if err != nil {
 		log.Printf("error calculating %s: %s", typs[0], err)
 		return 1
