@@ -20,8 +20,8 @@ Help output:
 
     checksome -h
     
-Default input: _stdin_
-Default output: _stdout_
+Default input: _stdin_  
+Default output: _stdout_  
 
 ## License  
 Copyright (c) 2016 Joel Scoble under The MIT License (MIT)
