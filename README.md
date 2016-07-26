@@ -6,7 +6,7 @@ Cross-platform tool to calculate checksums.
 
 ## Supported Checksum algorithms  
 * SHA1  
-* SHA256 (default)  
+* SHA256 __(default)__
 * SHA384  
 * SHA512  
 * SHA512_224  
@@ -16,7 +16,12 @@ Cross-platform tool to calculate checksums.
 
 `go install github.com/mohae/checksome`
 
-`checksome -h`
+Help output:
+
+    checksome -h
+    
+Default input: _stdin_
+Default output: _stdout_
 
 ## License  
 Copyright (c) 2016 Joel Scoble under The MIT License (MIT)
