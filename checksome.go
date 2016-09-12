@@ -7,7 +7,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package main
+package checksome
 
 import (
 	"bufio"
@@ -35,8 +35,10 @@ const (
 	SHA512_256
 )
 
+var Upper bool
+
 // checksumFromString returns the Checksum from the provided string.
-func checksumFromString(v string) (Checksum, error) {
+func ChecksumFromString(v string) (Checksum, error) {
 	switch strings.ToLower(v) {
 	case "sha1":
 		return SHA1, nil
@@ -57,7 +59,7 @@ func checksumFromString(v string) (Checksum, error) {
 	}
 }
 
-func getHasher(typ Checksum) hash.Hash {
+func GetHasher(typ Checksum) hash.Hash {
 	switch typ {
 	case SHA1:
 		return sha1.New()
@@ -81,11 +83,11 @@ func getHasher(typ Checksum) hash.Hash {
 // reading the data from reader and writing the resulting checksum to the
 // writer.  The checksum type is used to determine which algorithm will be
 // used.  The number of bytes read and any error encountered is returned.
-func calcSum(c Checksum, chunk int, r io.Reader, w io.Writer) (n int64, err error) {
+func CalcSum(c Checksum, chunk int, r io.Reader, w io.Writer) (n int64, err error) {
 	if chunk < 1 {
 		return 0, fmt.Errorf("invalid chunk size: %d", chunk)
 	}
-	h := getHasher(c)
+	h := GetHasher(c)
 	if h == nil {
 		return 0, fmt.Errorf("unknown checksum type: %s", c)
 	}
@@ -106,7 +108,7 @@ func calcSum(c Checksum, chunk int, r io.Reader, w io.Writer) (n int64, err erro
 		}
 	}
 	bs := h.Sum(nil)
-	if upper {
+	if Upper {
 		fmt.Fprintf(w, "%X", bs)
 	} else {
 		fmt.Fprintf(w, "%x", bs)
@@ -114,7 +116,7 @@ func calcSum(c Checksum, chunk int, r io.Reader, w io.Writer) (n int64, err erro
 	return n, nil
 }
 
-func sum(typ Checksum, data []byte) []byte {
+func Sum(typ Checksum, data []byte) []byte {
 	switch typ {
 	case SHA1:
 		h := sha1.Sum(data)

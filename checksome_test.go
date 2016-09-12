@@ -1,4 +1,4 @@
-package main
+package checksome
 
 import (
 	"bytes"
@@ -28,7 +28,7 @@ func TestChecksumFromString(t *testing.T) {
 		{"wut", Unknown, "unknown checksum type: wut"},
 	}
 	for i, test := range tests {
-		c, err := checksumFromString(test.val)
+		c, err := ChecksumFromString(test.val)
 		if err != nil {
 			if err.Error() != test.err {
 				t.Errorf("%d: got %q want %q", i, err, test.err)
@@ -62,7 +62,7 @@ func TestSum(t *testing.T) {
 	data := []byte("Hello, World.")
 
 	for _, test := range tests {
-		h := sum(test.typ, data)
+		h := Sum(test.typ, data)
 		if bytes.Compare(h, test.expected) != 0 {
 			t.Errorf("%s: got %v want %v", test.typ, h, test.expected)
 		}
@@ -94,7 +94,7 @@ func TestCalcHash(t *testing.T) {
 		b := make([]byte, 0, 64)
 		r := bytes.NewBuffer(data)
 		w := bytes.NewBuffer(b)
-		n, err := calcSum(test.typ, test.chunk, r, w)
+		n, err := CalcSum(test.typ, test.chunk, r, w)
 		if err != nil {
 			if err.Error() != test.err {
 				t.Errorf("%s: got %q, want %q", test.name, err, test.err)
