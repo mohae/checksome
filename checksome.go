@@ -37,9 +37,10 @@ const (
 
 var Upper bool
 
-// checksumFromString returns the Checksum from the provided string.
-func ChecksumFromString(v string) (Checksum, error) {
-	switch strings.ToLower(v) {
+// ChecksumFromString returns the Checksum from the provided string.  For
+// comparisons, hash names are normalized to lower case
+func ChecksumFromString(name string) (Checksum, error) {
+	switch strings.ToLower(name) {
 	case "sha1":
 		return SHA1, nil
 	case "sha224":
@@ -55,10 +56,12 @@ func ChecksumFromString(v string) (Checksum, error) {
 	case "sha512_256":
 		return SHA512_256, nil
 	default:
-		return Unknown, fmt.Errorf("unknown checksum type: %s", v)
+		return Unknown, fmt.Errorf("Checksum: unsupported hash function type: %s", name)
 	}
 }
 
+// GetHasher returns the hash.Hash for the supplied Checksum.  If the Checksum
+// is Unknown, a nil will be returned.
 func GetHasher(typ Checksum) hash.Hash {
 	switch typ {
 	case SHA1:
@@ -79,10 +82,11 @@ func GetHasher(typ Checksum) hash.Hash {
 	return nil
 }
 
-// calcSum takes a Checksum type, buffer size (chunk), reader, and writer;
+// CalcSum takes a Checksum type, buffer size (chunk), reader, and writer;
 // reading the data from reader and writing the resulting checksum to the
-// writer.  The checksum type is used to determine which algorithm will be
-// used.  The number of bytes read and any error encountered is returned.
+// writer.  The Checksum specifies the hash function to use for the
+// calculation.  The number of bytes read and any error encountered is
+// returned.
 func CalcSum(c Checksum, chunk int, r io.Reader, w io.Writer) (n int64, err error) {
 	if chunk < 1 {
 		return 0, fmt.Errorf("invalid chunk size: %d", chunk)
@@ -116,6 +120,7 @@ func CalcSum(c Checksum, chunk int, r io.Reader, w io.Writer) (n int64, err erro
 	return n, nil
 }
 
+// Sum calculates the checksum of the data using the specified hash function.
 func Sum(typ Checksum, data []byte) []byte {
 	switch typ {
 	case SHA1:
