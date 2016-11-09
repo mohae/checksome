@@ -20,6 +20,8 @@ import (
 	"strings"
 )
 
+const defaultChunk = 4096
+
 //go:generate stringer -type=Checksum
 type Checksum int
 
@@ -146,4 +148,49 @@ func Sum(typ Checksum, data []byte) []byte {
 		return h[:]
 	}
 	return nil
+}
+
+// HashSHA256 calculates hashes using the SHA256 hashing function.
+type HashSHA256 struct {
+	r    io.Reader
+	w    io.Writer
+	h    hash.Hash
+	buff *bufio.Reader
+}
+
+// TODO: should this be interface based (probably)
+
+// NewSHA256 returns a *HashSHA256 that uses the provided io.Reader and
+// io.Writer.  If bufferSize > 0; the read buffer will be sized to that value.
+func NewSHA256(r io.Reader, w io.Writer, bufferSize int) *HashSHA256 {
+	h := HashSHA256{
+		r: r,
+		w: w,
+		h: sha256.New(),
+	}
+	if bufferSize > 0 {
+		h.buff = bufio.NewReaderSize(r, chunk)
+	} else {
+		h.buff = bufio.NewReaderSize(r, defaultChunk)
+	}
+	return &h
+}
+
+// Sum calculates the hash of the bytes in the reader and writes the value to
+// the writer.  The number of bytes read is returned.  If there is an error,
+// the error is returned along with the number of bytes successfully read.
+func (h *HashSHA256) Sum() (n int64, err error) {
+	// refactor to use a generic implementation
+	var x int64
+	for {
+		x, err = io.Copy(h.h, h, buff)
+		n += x
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			return h.n, err
+		}
+		// if 0 bytes were read; at end
+	}
 }
