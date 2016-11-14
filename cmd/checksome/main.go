@@ -41,8 +41,8 @@ func init() {
 	flag.BoolVar(&verbose, "v", false, "verbose output (short)")
 	flag.BoolVar(&upper, "upper", false, "uppercase the output")
 	flag.BoolVar(&upper, "u", false, "uppercase the output (short)")
-	flag.StringVar(&checksum, "checksum", "sha256", "checksum algorithm")
-	flag.StringVar(&checksum, "c", "sha256", "checksum algorithm (short)")
+	flag.StringVar(&checksum, "hash", "sha256", "hash algorithm")
+	flag.StringVar(&checksum, "-s", "sha256", "hash algorithm (short)")
 }
 
 func main() {
