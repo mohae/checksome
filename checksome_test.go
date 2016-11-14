@@ -25,7 +25,7 @@ func TestChecksumFromString(t *testing.T) {
 		{"SHA512", SHA512, ""},
 		{"SHA512_224", SHA512_224, ""},
 		{"SHA512_256", SHA512_256, ""},
-		{"wut", Unknown, "unknown checksum type: wut"},
+		{"wut", Unknown, "checksum: unsupported hash function type: wut"},
 	}
 	for i, test := range tests {
 		c, err := ChecksumFromString(test.val)
@@ -84,7 +84,7 @@ func TestCalcHash(t *testing.T) {
 		{"SHA512", SHA512, 1024, "8cb2dd0629859c904065700a761cf2616a26d8d477560eed473d3489c53720461511b66f191d06537e3887f4e6f40cb9b0231285b9b5dd6995f0825b18d5f1af", ""},
 		{"SHA512_224", SHA512_224, 1024, "53564fa82b93c6e9d0d29470038f515224036ef5e87b84efb9df5d4c", ""},
 		{"SHA512_256", SHA512_256, 1024, "cd45929a5ee9d8e749409b8a086a60d67a3018e1e27b9efd8e76db49d5d26811", ""},
-		{"no hasher error", Unknown, 1024, "", "unknown checksum type: Unknown"},
+		{"no hasher error", Unknown, 1024, "", "unknown hash function type: Unknown"},
 		{"no buffer error", SHA1, 0, "", "invalid chunk size: 0"},
 	}
 

@@ -58,7 +58,7 @@ func ChecksumFromString(name string) (Checksum, error) {
 	case "sha512_256":
 		return SHA512_256, nil
 	default:
-		return Unknown, fmt.Errorf("Checksum: unsupported hash function type: %s", name)
+		return Unknown, fmt.Errorf("checksum: unsupported hash function type: %s", name)
 	}
 }
 
@@ -95,7 +95,7 @@ func CalcSum(c Checksum, chunk int, r io.Reader, w io.Writer) (n int64, err erro
 	}
 	h := GetHasher(c)
 	if h == nil {
-		return 0, fmt.Errorf("unknown checksum type: %s", c)
+		return 0, fmt.Errorf("unknown hash function type: %s", c)
 	}
 	buf := bufio.NewReaderSize(r, chunk)
 	var x int64
@@ -150,6 +150,7 @@ func Sum(typ Checksum, data []byte) []byte {
 	return nil
 }
 
+/*
 // HashSHA256 calculates hashes using the SHA256 hashing function.
 type HashSHA256 struct {
 	r    io.Reader
@@ -194,3 +195,4 @@ func (h *HashSHA256) Sum() (n int64, err error) {
 		// if 0 bytes were read; at end
 	}
 }
+*/
