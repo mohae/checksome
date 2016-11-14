@@ -18,6 +18,8 @@ import (
 	"github.com/mohae/checksome"
 )
 
+const defaultChunk = 1 << 14
+
 var (
 	input     string
 	output    string
@@ -33,8 +35,8 @@ func init() {
 	flag.StringVar(&input, "i", "stdin", "input source (short)")
 	flag.StringVar(&output, "output", "stdout", "output destination")
 	flag.StringVar(&output, "o", "stdout", "output destination (short)")
-	flag.IntVar(&chunkSize, "readchunk", 8192, "size, in bytes, of each read from the input")
-	flag.IntVar(&chunkSize, "r", 8192, "size, in bytes, of each read from the input (short)")
+	flag.IntVar(&chunkSize, "readchunk", defaultChunk, "size, in bytes, of each read from the input")
+	flag.IntVar(&chunkSize, "r", defaultChunk, "size, in bytes, of each read from the input (short)")
 	flag.BoolVar(&help, "help", false, "help")
 	flag.BoolVar(&help, "h", false, "help (short)")
 	flag.BoolVar(&verbose, "verbose", false, "verbose output")
