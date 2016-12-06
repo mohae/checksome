@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-const defaultChunk = 4096
+const DefaultChunk = 4096
 
 //go:generate stringer -type=Checksum
 type Checksum int
